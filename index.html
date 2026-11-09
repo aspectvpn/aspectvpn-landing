@@ -1,302 +1,304 @@
-<!DOCTYPE html>
-<html lang="en" class="dark scroll-smooth">
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AspectVPN — Native Mobile Networking SDK for iOS & React Native</title>
-    <meta name="description" content="AspectVPN provides drop-in secure tunneling, proxy routing, and compliance-ready infrastructure for iOS and React Native mobile applications.">
-    
-    <!-- Tailwind CSS v3 CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Fonts: Inter & JetBrains Mono -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
-                    },
-                    colors: {
-                        emeraldAccent: '#4ADE80',
-                        slate: {
-                            950: '#030712',
-                            900: '#0B0F19',
-                            850: '#111827',
-                            800: '#1F2937',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        .glow-emerald {
-            box-shadow: 0 0 35px -5px rgba(74, 222, 128, 0.25);
-        }
-        .glow-cyan {
-            box-shadow: 0 0 35px -5px rgba(6, 182, 212, 0.25);
-        }
-        .grid-bg {
-            background-size: 40px 40px;
-            background-image: 
-                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AspectVPN: Secure networking SDK for iOS and React Native (concept)</title>
+<meta name="description" content="A concept for a drop-in secure tunneling SDK for iOS and React Native apps. Join the waitlist to help shape it.">
+<style>
+  :root{
+    --bg:#0b0f14; --panel:#121923; --panel-2:#0f151d; --line:#1f2a38;
+    --text:#e6edf5; --muted:#9aa9bb; --accent:#38d6a4; --accent-ink:#04261b;
+    --warn:#f2c14e; --radius:14px;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    --sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+
+  /* Banner */
+  .banner{background:#1a1608;border-bottom:1px solid #3a3113;color:var(--warn);font-size:.85rem;text-align:center;padding:8px 16px}
+
+  /* Nav */
+  header.nav{position:sticky;top:0;z-index:10;background:rgba(11,15,20,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .logo{font-family:var(--mono);font-weight:700;letter-spacing:.2px;color:var(--text);text-decoration:none}
+  .logo span{color:var(--accent)}
+  .nav ul{display:flex;gap:22px;list-style:none;margin:0;padding:0}
+  .nav ul a{color:var(--muted);text-decoration:none;font-size:.92rem}
+  .nav ul a:hover{color:var(--text)}
+  .btn{display:inline-block;background:var(--accent);color:var(--accent-ink);font-weight:600;border:0;border-radius:10px;padding:11px 20px;text-decoration:none;cursor:pointer;font-size:.95rem;font-family:inherit}
+  .btn:hover{filter:brightness(1.08)}
+  .btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+  .btn.ghost:hover{border-color:var(--muted)}
+  .nav .btn{padding:8px 16px}
+
+  /* Hero */
+  .hero{padding:72px 0 56px}
+  .hero .grid{display:grid;grid-template-columns:1.05fr 1fr;gap:44px;align-items:center}
+  .tag{display:inline-block;font-family:var(--mono);font-size:.78rem;color:var(--accent);border:1px solid #1d5c49;background:#0c2a22;padding:4px 10px;border-radius:999px;margin-bottom:18px}
+  h1{font-size:clamp(2rem,4.6vw,3.2rem);line-height:1.1;margin:0 0 16px;letter-spacing:-.02em}
+  h1 em{font-style:normal;color:var(--accent)}
+  .lead{color:var(--muted);font-size:1.1rem;max-width:34em;margin:0 0 26px}
+  .cta{display:flex;gap:12px;flex-wrap:wrap}
+  .fine{color:var(--muted);font-size:.85rem;margin-top:14px}
+
+  /* Code card */
+  .code{background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+  .code .bar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--panel)}
+  .dot{width:10px;height:10px;border-radius:50%;background:#2a3646}
+  .code .file{margin-left:8px;font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+  pre{margin:0;padding:18px;overflow-x:auto;font-family:var(--mono);font-size:.84rem;line-height:1.7;color:#cfe3f5}
+  .c{color:#5f7189}.k{color:#c792ea}.s{color:#9be28f}.f{color:#7cc4ff}
+  .code .note{padding:10px 18px;border-top:1px solid var(--line);font-size:.78rem;color:var(--muted);background:var(--panel)}
+
+  /* Sections */
+  section{padding:64px 0;border-top:1px solid var(--line)}
+  .eyebrow{font-family:var(--mono);color:var(--accent);font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;margin:0 0 10px}
+  h2{font-size:clamp(1.5rem,3vw,2.1rem);margin:0 0 12px;letter-spacing:-.01em}
+  .sub{color:var(--muted);max-width:38em;margin:0 0 34px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+  .card h3{margin:0 0 8px;font-size:1.05rem}
+  .card p{margin:0;color:var(--muted);font-size:.95rem}
+  .icon{font-family:var(--mono);color:var(--accent);font-size:1.1rem;margin-bottom:10px;display:block}
+
+  /* Steps */
+  .steps{counter-reset:s;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;padding:0;margin:0;list-style:none}
+  .steps li{counter-increment:s;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px;position:relative}
+  .steps li::before{content:"0" counter(s);font-family:var(--mono);color:var(--accent);font-size:.85rem;display:block;margin-bottom:8px}
+  .steps h3{margin:0 0 6px;font-size:1.02rem}
+  .steps p{margin:0;color:var(--muted);font-size:.93rem}
+
+  /* Different */
+  .diff{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .diff .card.them{background:transparent;border-style:dashed}
+  .diff ul{margin:10px 0 0;padding-left:18px;color:var(--muted)}
+  .diff li{margin:6px 0}
+
+  /* Waitlist */
+  #waitlist .box{background:linear-gradient(180deg,var(--panel),var(--panel-2));border:1px solid var(--line);border-radius:18px;padding:34px;max-width:620px;margin:0 auto}
+  form{display:grid;gap:16px;margin-top:22px}
+  label{display:block;font-size:.9rem;margin-bottom:6px;font-weight:500}
+  .opt{color:var(--muted);font-weight:400}
+  input[type=email],select,textarea{width:100%;background:#0b1118;color:var(--text);border:1px solid #2a3646;border-radius:10px;padding:12px 14px;font:inherit}
+  input::placeholder,textarea::placeholder{color:#5f7189}
+  textarea{min-height:90px;resize:vertical}
+  .msg{display:none;border:1px solid #1d5c49;background:#0c2a22;color:#b6f3de;border-radius:10px;padding:14px 16px;margin-top:6px}
+  .msg.show{display:block}
+  .hp{position:absolute;left:-9999px;height:0;width:0;overflow:hidden}
+
+  /* FAQ */
+  details{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:10px}
+  summary{cursor:pointer;font-weight:600}
+  details p{color:var(--muted);margin:10px 0 0}
+
+  footer{border-top:1px solid var(--line);padding:30px 0 50px;color:var(--muted);font-size:.85rem}
+  footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+  @media (max-width:860px){
+    .hero .grid,.diff{grid-template-columns:1fr}
+    .nav ul{display:none}
+    .hero{padding-top:44px}
+  }
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-emerald-500 selection:text-slate-950 min-h-screen flex flex-col justify-between grid-bg">
+<body>
 
-    <!-- Header Navigation -->
-    <header class="sticky top-0 z-50 backdrop-blur-md bg-slate-950/80 border-b border-slate-800/80">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <a href="#" class="flex items-center gap-2 group font-mono text-xl sm:text-2xl font-semibold tracking-tight">
-                <span class="text-emerald-400 font-bold group-hover:text-emerald-300 transition-colors">//</span>
-                <span class="text-slate-100 font-normal">aspect</span><span class="text-slate-100 font-bold">VPN</span>
-            </a>
+<div class="banner" role="note">Early-stage concept. We're gathering interest from mobile teams. Features and availability may change.</div>
 
-            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
-                <a href="#features" class="hover:text-slate-100 transition-colors">Specs</a>
-                <a href="#code" class="hover:text-slate-100 transition-colors">Integration</a>
-                <a href="#comparison" class="hover:text-slate-100 transition-colors">Enterprise Benchmarks</a>
-                <a href="https://docs.aspectvpn.app" target="_blank" rel="noopener noreferrer" class="hover:text-slate-100 transition-colors">Docs</a>
-            </nav>
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#top">aspect<span>VPN</span></a>
+    <nav aria-label="Primary">
+      <ul>
+        <li><a href="#what">What it is</a></li>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#different">Why different</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </nav>
+    <a class="btn" href="#waitlist">Join the waitlist</a>
+  </div>
+</header>
 
-            <div>
-                <a href="#waitlist" class="inline-flex items-center justify-center px-4 py-2 text-xs sm:text-sm font-mono font-semibold text-slate-950 bg-emerald-400 hover:bg-emerald-300 rounded-md transition-all shadow-lg shadow-emerald-400/20 active:scale-95">
-                    Get Early Access
-                </a>
-            </div>
+<main id="top">
+  <div class="hero">
+    <div class="wrap grid">
+      <div>
+        <span class="tag">private beta · in development</span>
+        <h1>Secure mobile networking, <em>built for app developers.</em></h1>
+        <p class="lead">A drop-in SDK for secure tunneling and proxy routing inside iOS and React Native apps. No desktop VPN clients, no network-admin setup, just a few lines of code.</p>
+        <div class="cta">
+          <a class="btn" href="#waitlist">Get early access</a>
+          <a class="btn ghost" href="#how">See how it would work</a>
         </div>
-    </header>
+        <p class="fine">Free to join. We'll only email you about AspectVPN.</p>
+      </div>
 
-    <main class="flex-grow">
-        <!-- Hero Section -->
-        <section class="relative pt-12 sm:pt-20 pb-20 sm:pb-32 overflow-hidden">
-            <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none"></div>
-            <div class="absolute top-1/3 left-1/3 w-[400px] h-[300px] bg-cyan-500/10 blur-[100px] rounded-full pointer-events-none"></div>
+      <div class="code" aria-label="Example SDK usage">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="file">App.tsx</span></div>
+<pre><code><span class="c"># install</span>
+$ npm install @aspectvpn/react-native
 
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-                    
-                    <div class="lg:col-span-6 space-y-6 text-left">
-                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-xs font-mono text-emerald-400">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                            aspectvpn-native v1.0.0-rc2
-                        </div>
+<span class="k">import</span> { AspectVPN } <span class="k">from</span> <span class="s">'@aspectvpn/react-native'</span>;
 
-                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.1]">
-                            Secure mobile networking. <br class="hidden sm:inline" />
-                            <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">One line of code.</span>
-                        </h1>
+<span class="k">const</span> client = <span class="k">await</span> AspectVPN.<span class="f">initialize</span>({
+  apiKey: <span class="s">'YOUR_API_KEY'</span>,
+  region: <span class="s">'us-east-1'</span>,
+});
 
-                        <p class="text-base sm:text-lg text-slate-400 max-w-xl leading-relaxed">
-                            Drop-in secure WireGuard® tunneling, proxy routing, and zero-trust mobile networking for iOS and React Native applications. Ditch heavy legacy enterprise clients.
-                        </p>
+<span class="k">await</span> client.<span class="f">connect</span>();</code></pre>
+        <div class="note">Example API, subject to change. The SDK is not yet publicly available.</div>
+      </div>
+    </div>
+  </div>
 
-                        <div id="waitlist" class="pt-2">
-                            <form action="#" method="POST" onsubmit="event.preventDefault(); alert('Thank you for requesting early SDK access! We will be in touch shortly.');" class="flex flex-col sm:flex-row gap-3 max-w-md">
-                                <div class="relative flex-grow">
-                                    <input 
-                                        type="email" 
-                                        required 
-                                        placeholder="cto@company.com" 
-                                        class="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-lg:font-mono text-sm focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 transition-colors"
-                                    />
-                                </div>
-                                <button 
-                                    type="submit" 
-                                    class="px-6 py-3 bg-slate-100 hover:bg-white text-slate-950 font-semibold text-sm rounded-lg transition-all shadow-md active:scale-95 flex items-center justify-center gap-2 whitespace-nowrap"
-                                >
-                                    Get Early Access
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                                </button>
-                            </form>
-                            <p class="mt-2 text-xs text-slate-500 font-mono">
-                                Request instant beta access for iOS &amp; React Native engineering teams.
-                            </p>
-                        </div>
-                    </div>
+  <section id="what">
+    <div class="wrap">
+      <p class="eyebrow">What it is</p>
+      <h2>Networking that fits how apps are actually built</h2>
+      <p class="sub">The goal is to give mobile engineers a secure connection layer they can add in an afternoon, not a project for the IT team.</p>
+      <div class="cards">
+        <div class="card"><span class="icon">&gt;_</span><h3>Simple SDK</h3><p>One initialise call and one connect call. Sensible defaults, with options when you need them.</p></div>
+        <div class="card"><span class="icon">&lt;/&gt;</span><h3>Native iOS and React Native</h3><p>Swift and Objective-C bindings plus a React Native module, so it feels at home in your stack.</p></div>
+        <div class="card"><span class="icon">⇄</span><h3>Smooth network handover</h3><p>Designed to recover gracefully when a device moves between Wi-Fi and cellular.</p></div>
+        <div class="card"><span class="icon">▤</span><h3>Per-app routing</h3><p>Route only your app's traffic, with separate settings for staging and production.</p></div>
+      </div>
+    </div>
+  </section>
 
-                    <div class="lg:col-span-6" id="code">
-                        <div class="relative rounded-xl border border-slate-800 bg-slate-900 shadow-2xl overflow-hidden glow-emerald">
-                            <div class="px-4 py-3 bg-slate-950/80 border-b border-slate-800 flex items-center justify-between">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
-                                    <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
-                                    <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
-                                    <span class="ml-2 text-xs font-mono text-slate-400">App.tsx</span>
-                                </div>
-                                <span class="text-xs font-mono text-slate-500">React Native / Swift</span>
-                            </div>
+  <section id="how">
+    <div class="wrap">
+      <p class="eyebrow">How it would work</p>
+      <h2>From install to working tunnel in minutes</h2>
+      <p class="sub">That's the target we're designing towards. Your feedback will shape what ships first.</p>
+      <ol class="steps">
+        <li><h3>Create a project</h3><p>Get an API key from a simple dashboard and pick your region.</p></li>
+        <li><h3>Add the SDK</h3><p>Install the package for iOS or React Native and initialise it with your key.</p></li>
+        <li><h3>Connect and monitor</h3><p>Open a tunnel with one call, then check usage and connection health in the dashboard.</p></li>
+      </ol>
+    </div>
+  </section>
 
-                            <div class="p-5 font-mono text-xs sm:text-sm text-slate-300 leading-relaxed overflow-x-auto space-y-4">
-                                <div>
-                                    <span class="text-slate-500 select-none"># 1. Install the high-performance native core</span>
-                                    <div class="text-emerald-400 mt-1">
-                                        <span class="text-slate-500 select-none">$ </span>npm install @aspectvpn/react-native
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <span class="text-slate-500 select-none"># 2. Initialize encrypted tunneling</span>
-                                    <div class="mt-1">
-                                        <span class="text-purple-400">import</span> { AspectVPN } <span class="text-purple-400">from</span> <span class="text-emerald-300">'@aspectvpn/react-native'</span>;
-                                    </div>
-                                    <div class="mt-3">
-                                        <span class="text-purple-400">const</span> client = <span class="text-purple-400">await</span> AspectVPN.<span class="text-blue-400">initialize</span>({<br>
-                                        &nbsp;&nbsp;apiKey: <span class="text-emerald-300">'asp_live_8f912a7...'</span>,<br>
-                                        &nbsp;&nbsp;region: <span class="text-emerald-300">'us-east-1'</span>,<br>
-                                        &nbsp;&nbsp;strictZeroLogs: <span class="text-amber-400">true</span><br>
-                                        });
-                                    </div>
-                                    <div class="mt-3">
-                                        <span class="text-slate-500 select-none">// Connect native WireGuard tunnel in &lt;140ms</span><br>
-                                        <span class="text-purple-400">await</span> client.<span class="text-blue-400">connect</span>();
-                                    </div>
-                                </div>
-
-                                <div class="pt-3 border-t border-slate-800 text-xs">
-                                    <div class="text-emerald-400 flex items-center gap-2">
-                                        <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                                        <span>[AspectEngine] WireGuard tunnel active (wg0)</span>
-                                    </div>
-                                    <div class="text-slate-500 ml-6">Latency: 12ms | Overhead: 1.8MB | Zero Logs Enforced</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-<!-- Technical Specifications Grid Section -->
-        <section id="features" class="py-20 bg-slate-900/50 border-y border-slate-800">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-3xl mx-auto mb-16">
-                    <h2 class="text-xs font-mono font-semibold text-emerald-400 uppercase tracking-widest mb-2">// ENGINE SPECIFICATIONS</h2>
-                    <p class="text-3xl sm:text-4xl font-bold text-white tracking-tight">Engineered for mobile runtime constraints</p>
-                    <p class="mt-4 text-slate-400 text-sm sm:text-base">Built natively in Swift &amp; C/Rust for zero impact on thread lock or app startup time.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="p-6 bg-slate-900 border border-slate-800 rounded-xl hover:border-emerald-500/50 transition-colors group">
-                        <div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4 group-hover:scale-110 transition-transform">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-white mb-2">&lt; 2.4MB Footprint</h3>
-                        <p class="text-sm text-slate-400">Ultra-slim SDK binary. Prevents app store size penalties and preserves fast cold-start performance.</p>
-                    </div>
-
-                    <div class="p-6 bg-slate-900 border border-slate-800 rounded-xl hover:border-emerald-500/50 transition-colors group">
-                        <div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4 group-hover:scale-110 transition-transform">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-white mb-2">WireGuard® Core</h3>
-                        <p class="text-sm text-slate-400">State-of-the-art Noise protocol cryptography delivering up to 4x faster handshakes than OpenVPN setups.</p>
-                    </div>
-
-                    <div class="p-6 bg-slate-900 border border-slate-800 rounded-xl hover:border-emerald-500/50 transition-colors group">
-                        <div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4 group-hover:scale-110 transition-transform">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-white mb-2">Native iOS &amp; RN Engines</h3>
-                        <p class="text-sm text-slate-400">First-class bindings for Swift, Objective-C, and React Native bridge with automatic reconnect logic.</p>
-                    </div>
-
-                    <div class="p-6 bg-slate-900 border border-slate-800 rounded-xl hover:border-emerald-500/50 transition-colors group">
-                        <div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4 group-hover:scale-110 transition-transform">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-white mb-2">Zero-Logs Compliance</h3>
-                        <p class="text-sm text-slate-400">SOC2 Type II and HIPAA-compliant architecture. Cryptographically guaranteed no-payload logging.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Enterprise Benchmarks Comparison Section -->
-        <section id="comparison" class="py-20">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-3xl mx-auto mb-16">
-                    <h2 class="text-xs font-mono font-semibold text-emerald-400 uppercase tracking-widest mb-2">// ARCHITECTURAL BENCHMARKS</h2>
-                    <p class="text-3xl sm:text-4xl font-bold text-white tracking-tight">Built for modern app stacks, not 2010 legacy IT</p>
-                    <p class="mt-4 text-slate-400 text-sm sm:text-base">See how AspectVPN replaces cumbersome enterprise setups like BambooVPN and custom IPsec configurations.</p>
-                </div>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse bg-slate-900/60 rounded-xl overflow-hidden border border-slate-800 text-sm">
-                        <thead>
-                            <tr class="border-b border-slate-800 bg-slate-950/80">
-                                <th class="p-4 sm:p-5 font-mono text-slate-400 font-medium">Metric / Feature</th>
-                                <th class="p-4 sm:p-5 font-mono text-emerald-400 font-bold bg-emerald-500/5">// AspectVPN SDK</th>
-                                <th class="p-4 sm:p-5 font-mono text-slate-400 font-medium">BambooVPN / Legacy VPN</th>
-                                <th class="p-4 sm:p-5 font-mono text-slate-400 font-medium">Custom IPsec Tunnel</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-800 text-slate-300">
-                            <tr>
-                                <td class="p-4 sm:p-5 font-semibold text-white">Time to First Tunnel</td>
-                                <td class="p-4 sm:p-5 bg-emerald-500/5 text-emerald-400 font-mono font-bold">&lt; 140 ms</td>
-                                <td class="p-4 sm:p-5 font-mono text-slate-400">3,200 ms - 6,500 ms</td>
-                                <td class="p-4 sm:p-5 font-mono text-slate-400">1,800 ms - 4,000 ms</td>
-                            </tr>
-                            <tr>
-                                <td class="p-4 sm:p-5 font-semibold text-white">SDK Bundle Size</td>
-                                <td class="p-4 sm:p-5 bg-emerald-500/5 text-emerald-400 font-mono font-bold">2.3 MB (Compiled)</td>
-                                <td class="p-4 sm:p-5 font-mono text-slate-400">45 MB+ (Desktop ports)</td>
-                                <td class="p-4 sm:p-5 font-mono text-slate-400">12 MB - 18 MB</td>
-                            </tr>
-                            <tr>
-                                <td class="p-4 sm:p-5 font-semibold text-white">React Native Support</td>
-                                <td class="p-4 sm:p-5 bg-emerald-500/5 text-emerald-400 font-mono font-bold">Native Hook &amp; Provider</td>
-                                <td class="p-4 sm:p-5 text-slate-400">Third-party community wrapper</td>
-                                <td class="p-4 sm:p-5 text-slate-400">Manual Native Bridge setup</td>
-                            </tr>
-                            <tr>
-                                <td class="p-4 sm:p-5 font-semibold text-white">Network Handover Handling</td>
-                                <td class="p-4 sm:p-5 bg-emerald-500/5 text-emerald-400 font-mono font-bold">Seamless (Cellular/Wi-Fi)</td>
-                                <td class="p-4 sm:p-5 text-slate-400">Frequent reconnect drops</td>
-                                <td class="p-4 sm:p-5 text-slate-400">Requires manual retry logic</td>
-                            </tr>
-                            <tr>
-                                <td class="p-4 sm:p-5 font-semibold text-white">Compliance &amp; Zero Logs</td>
-                                <td class="p-4 sm:p-5 bg-emerald-500/5 text-emerald-400 font-mono font-bold">Hardware-backed Zero-Log</td>
-                                <td class="p-4 sm:p-5 text-slate-400">Varies by enterprise node</td>
-                                <td class="p-4 sm:p-5 text-slate-400">Self-managed logging infrastructure</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-slate-950 border-t border-slate-800 py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div class="flex items-center gap-2 font-mono text-lg font-semibold">
-                <span class="text-emerald-400 font-bold">//</span>
-                <span class="text-slate-100 font-normal">aspect</span><span class="text-slate-100 font-bold">VPN</span>
-            </div>
-            
-            <p class="text-xs text-slate-500 font-mono text-center sm:text-left">
-                &copy; 2026 AspectVPN, Inc. All rights reserved. High-Performance Mobile Tunneling Infrastructure.
-            </p>
-
-            <div class="flex items-center gap-6 text-xs text-slate-400 font-mono">
-                <a href="https://aspectvpn.app/privacy" class="hover:text-slate-100 transition-colors">Privacy</a>
-                <a href="https://aspectvpn.app/terms" class="hover:text-slate-100 transition-colors">Terms</a>
-                <a href="https://github.com/aspectvpn" class="hover:text-slate-100 transition-colors">GitHub</a>
-            </div>
+  <section id="different">
+    <div class="wrap">
+      <p class="eyebrow">Why different</p>
+      <h2>Aimed at app teams, not IT admins</h2>
+      <p class="sub">General-purpose VPN tools solve a different problem. We're focused on the one app developers actually have.</p>
+      <div class="diff">
+        <div class="card">
+          <h3>What we're designing for</h3>
+          <ul>
+            <li>Built for app developers, not network administrators</li>
+            <li>A drop-in SDK with a single initialise and connect flow</li>
+            <li>Native iOS and React Native bindings</li>
+            <li>Smooth reconnects when switching networks</li>
+          </ul>
         </div>
-    </footer>
+        <div class="card them">
+          <h3>What we're not</h3>
+          <ul>
+            <li>Not a consumer VPN app</li>
+            <li>Not a desktop client wrapped for mobile</li>
+            <li>Not a compliance certification: any compliance features are planned and will be documented honestly</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
 
+  <section id="waitlist">
+    <div class="wrap">
+      <div class="box">
+        <p class="eyebrow">Early access</p>
+        <h2>Help shape it</h2>
+        <p class="sub" style="margin-bottom:0">We're talking to mobile teams about what they need before we build. Join the waitlist and tell us what you'd use it for.</p>
+
+        <form id="waitlist-form" novalidate>
+          <div class="hp" aria-hidden="true"><label>Leave blank <input type="text" name="company_website" tabindex="-1" autocomplete="off"></label></div>
+          <div>
+            <label for="email">Work email</label>
+            <input id="email" name="email" type="email" required placeholder="you@company.com" autocomplete="email">
+          </div>
+          <div>
+            <label for="platform">Platform</label>
+            <select id="platform" name="platform" required>
+              <option value="">Choose one</option>
+              <option>iOS (Swift / Obj-C)</option>
+              <option>React Native</option>
+              <option>Both</option>
+            </select>
+          </div>
+          <div>
+            <label for="usecase">What would you use it for? <span class="opt">(optional)</span></label>
+            <textarea id="usecase" name="usecase" placeholder="e.g. routing traffic to a private API, region-specific access, secure data transfer…"></textarea>
+          </div>
+          <button class="btn" type="submit">Join the waitlist</button>
+          <div id="form-msg" class="msg" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap">
+      <p class="eyebrow">FAQ</p>
+      <h2>Questions</h2>
+      <details><summary>Is the product available now?</summary><p>No. This is an early-stage concept and the SDK isn't publicly available yet. The waitlist helps us decide what to build first.</p></details>
+      <details><summary>Will you log my users' traffic?</summary><p>We haven't finalised a logging policy. Privacy is a core design goal, and we'll publish a clear, specific policy before any public release.</p></details>
+      <details><summary>Which platforms will you support first?</summary><p>iOS and React Native. Tell us which matters most to you in the form above.</p></details>
+      <details><summary>How much will it cost?</summary><p>Pricing isn't set. We expect a simple per-app or per-team subscription, and waitlist members will hear first.</p></details>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 AspectVPN. An early-stage concept. Features and availability may change.</span>
+    <span>Questions? Reply to any waitlist email.</span>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var form = document.getElementById('waitlist-form');
+    var msg = document.getElementById('form-msg');
+
+    // TODO: replace with your real form service endpoint (e.g. Formspree or Tally)
+    var ENDPOINT = 'https://example.com/replace-with-your-form-endpoint';
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      msg.className = 'msg';
+
+      var email = form.email.value.trim();
+      var platform = form.platform.value;
+      if (form.company_website.value) return; // honeypot
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || !platform) {
+        msg.textContent = 'Please enter a valid email and choose a platform.';
+        msg.className = 'msg show';
+        return;
+      }
+
+      var data = { email: email, platform: platform, usecase: form.usecase.value.trim() };
+
+      fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(data)
+      }).catch(function(){ /* placeholder endpoint will fail until configured */ });
+
+      msg.textContent = "Thanks, you're on the list. We'll be in touch as we get closer to a private beta.";
+      msg.className = 'msg show';
+      form.reset();
+    });
+  })();
+</script>
 </body>
 </html>
