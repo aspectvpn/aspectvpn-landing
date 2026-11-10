@@ -3,149 +3,101 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AspectVPN: Secure networking SDK for iOS and React Native (concept)</title>
-<meta name="description" content="A concept for a drop-in secure tunneling SDK for iOS and React Native apps. Join the waitlist to help shape it.">
+<title>AspectVPN: secure networking SDK for iOS and React Native (concept)</title>
+<meta name="description" content="A concept for a drop-in secure tunneling SDK for iOS and React Native apps. Join the waitlist and help shape it.">
+<meta name="theme-color" content="#15171a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2315171a'/%3E%3Cpath d='M9 24 14 8M17 24 22 8' stroke='%235ed28c' stroke-width='3.2'/%3E%3C/svg%3E">
 <style>
-  :root{
-    --bg:#0b0f14; --panel:#121923; --panel-2:#0f151d; --line:#1f2a38;
-    --text:#e6edf5; --muted:#9aa9bb; --accent:#38d6a4; --accent-ink:#04261b;
-    --warn:#f2c14e; --radius:14px;
-    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-    --sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  }
-  *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
-  a{color:var(--accent)}
-  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
-  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
-
-  /* Banner */
-  .banner{background:#1a1608;border-bottom:1px solid #3a3113;color:var(--warn);font-size:.85rem;text-align:center;padding:8px 16px}
-
-  /* Nav */
-  header.nav{position:sticky;top:0;z-index:10;background:rgba(11,15,20,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
-  .logo{font-family:var(--mono);font-weight:700;letter-spacing:.2px;color:var(--text);text-decoration:none}
-  .logo span{color:var(--accent)}
-  .nav ul{display:flex;gap:22px;list-style:none;margin:0;padding:0}
-  .nav ul a{color:var(--muted);text-decoration:none;font-size:.92rem}
-  .nav ul a:hover{color:var(--text)}
-  .btn{display:inline-block;background:var(--accent);color:var(--accent-ink);font-weight:600;border:0;border-radius:10px;padding:11px 20px;text-decoration:none;cursor:pointer;font-size:.95rem;font-family:inherit}
-  .btn:hover{filter:brightness(1.08)}
-  .btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
-  .btn.ghost:hover{border-color:var(--muted)}
-  .nav .btn{padding:8px 16px}
-
-  /* Hero */
-  .hero{padding:72px 0 56px}
-  .hero .grid{display:grid;grid-template-columns:1.05fr 1fr;gap:44px;align-items:center}
-  .tag{display:inline-block;font-family:var(--mono);font-size:.78rem;color:var(--accent);border:1px solid #1d5c49;background:#0c2a22;padding:4px 10px;border-radius:999px;margin-bottom:18px}
-  h1{font-size:clamp(2rem,4.6vw,3.2rem);line-height:1.1;margin:0 0 16px;letter-spacing:-.02em}
-  h1 em{font-style:normal;color:var(--accent)}
-  .lead{color:var(--muted);font-size:1.1rem;max-width:34em;margin:0 0 26px}
-  .cta{display:flex;gap:12px;flex-wrap:wrap}
-  .fine{color:var(--muted);font-size:.85rem;margin-top:14px}
-
-  /* Code card */
-  .code{background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.35)}
-  .code .bar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--panel)}
-  .dot{width:10px;height:10px;border-radius:50%;background:#2a3646}
-  .code .file{margin-left:8px;font-family:var(--mono);font-size:.8rem;color:var(--muted)}
-  pre{margin:0;padding:18px;overflow-x:auto;font-family:var(--mono);font-size:.84rem;line-height:1.7;color:#cfe3f5}
-  .c{color:#5f7189}.k{color:#c792ea}.s{color:#9be28f}.f{color:#7cc4ff}
-  .code .note{padding:10px 18px;border-top:1px solid var(--line);font-size:.78rem;color:var(--muted);background:var(--panel)}
-
-  /* Sections */
-  section{padding:64px 0;border-top:1px solid var(--line)}
-  .eyebrow{font-family:var(--mono);color:var(--accent);font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;margin:0 0 10px}
-  h2{font-size:clamp(1.5rem,3vw,2.1rem);margin:0 0 12px;letter-spacing:-.01em}
-  .sub{color:var(--muted);max-width:38em;margin:0 0 34px}
-  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
-  .card h3{margin:0 0 8px;font-size:1.05rem}
-  .card p{margin:0;color:var(--muted);font-size:.95rem}
-  .icon{font-family:var(--mono);color:var(--accent);font-size:1.1rem;margin-bottom:10px;display:block}
-
-  /* Steps */
-  .steps{counter-reset:s;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;padding:0;margin:0;list-style:none}
-  .steps li{counter-increment:s;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px;position:relative}
-  .steps li::before{content:"0" counter(s);font-family:var(--mono);color:var(--accent);font-size:.85rem;display:block;margin-bottom:8px}
-  .steps h3{margin:0 0 6px;font-size:1.02rem}
-  .steps p{margin:0;color:var(--muted);font-size:.93rem}
-
-  /* Different */
-  .diff{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  .diff .card.them{background:transparent;border-style:dashed}
-  .diff ul{margin:10px 0 0;padding-left:18px;color:var(--muted)}
-  .diff li{margin:6px 0}
-
-  /* Waitlist */
-  #waitlist .box{background:linear-gradient(180deg,var(--panel),var(--panel-2));border:1px solid var(--line);border-radius:18px;padding:34px;max-width:620px;margin:0 auto}
-  form{display:grid;gap:16px;margin-top:22px}
-  label{display:block;font-size:.9rem;margin-bottom:6px;font-weight:500}
-  .opt{color:var(--muted);font-weight:400}
-  input[type=email],select,textarea{width:100%;background:#0b1118;color:var(--text);border:1px solid #2a3646;border-radius:10px;padding:12px 14px;font:inherit}
-  input::placeholder,textarea::placeholder{color:#5f7189}
-  textarea{min-height:90px;resize:vertical}
-  .msg{display:none;border:1px solid #1d5c49;background:#0c2a22;color:#b6f3de;border-radius:10px;padding:14px 16px;margin-top:6px}
-  .msg.show{display:block}
-  .hp{position:absolute;left:-9999px;height:0;width:0;overflow:hidden}
-
-  /* FAQ */
-  details{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:10px}
-  summary{cursor:pointer;font-weight:600}
-  details p{color:var(--muted);margin:10px 0 0}
-
-  footer{border-top:1px solid var(--line);padding:30px 0 50px;color:var(--muted);font-size:.85rem}
-  footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
-
-  @media (max-width:860px){
-    .hero .grid,.diff{grid-template-columns:1fr}
-    .nav ul{display:none}
-    .hero{padding-top:44px}
-  }
-  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+:root{--bg:#15171a;--panel:#1b1e22;--line:#282c32;--text:#fff;--muted:#9aa3ad;--g1:#2ea664;--g2:#9be8a8;--accent:#5ed28c;--ink:#07210f;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;--sans:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+.banner{background:#1d1b12;border-bottom:1px solid #3a3416;color:#e9c46a;font-size:.84rem;text-align:center;padding:8px 16px}
+header{position:sticky;top:0;z-index:10;background:rgba(21,23,26,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{display:flex;align-items:center;gap:10px;color:var(--text);text-decoration:none;font-size:1.25rem;font-weight:500;letter-spacing:-.01em}
+.logo svg{width:22px;height:22px}
+nav a.l{color:var(--muted);text-decoration:none;font-size:.92rem;margin-right:22px}
+nav a.l:hover{color:var(--text)}
+.btn{display:inline-block;background:var(--accent);color:var(--ink);font-weight:650;border:0;border-radius:10px;padding:12px 20px;text-decoration:none;cursor:pointer;font:inherit;font-weight:650;font-size:.95rem}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--text);border:1px solid #363b43}
+header .btn{padding:8px 16px;font-size:.9rem}
+.hero{padding:72px 0 56px;display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center}
+.tag{display:inline-block;font-family:var(--mono);font-size:.78rem;color:var(--accent);border:1px solid #25503a;background:#14261c;padding:4px 11px;border-radius:999px;margin-bottom:18px}
+h1{font-size:clamp(2rem,4.6vw,3.2rem);line-height:1.1;margin:0 0 16px;letter-spacing:-.025em}
+h1 em{font-style:normal;color:var(--accent)}
+.lead{color:var(--muted);font-size:1.1rem;margin:0 0 26px;max-width:32em}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.fine{color:#6f7983;font-size:.85rem;margin-top:14px}
+.win{background:#111316;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.4)}
+.win .bar{display:flex;align-items:center;gap:6px;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--panel);font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+.dot{width:10px;height:10px;border-radius:50%;background:#33383f}
+.copy{margin-left:auto;font:inherit;color:var(--muted);background:transparent;border:1px solid #363b43;border-radius:7px;padding:4px 10px;cursor:pointer}
+pre{margin:0;padding:18px 20px;overflow-x:auto;font-family:var(--mono);font-size:.83rem;line-height:1.75;color:#d6e2ee}
+.c{color:#5f6b78}.k{color:#c792ea}.s{color:var(--g2)}.f{color:#7cc4ff}
+.note{padding:10px 18px;border-top:1px solid var(--line);font-size:.78rem;color:#6f7983;background:var(--panel)}
+section{padding:60px 0;border-top:1px solid var(--line)}
+.eyebrow{font-family:var(--mono);color:var(--accent);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px}
+h2{font-size:clamp(1.5rem,3vw,2.05rem);margin:0 0 12px;letter-spacing:-.015em;line-height:1.2}
+.sub{color:var(--muted);max-width:40em;margin:0 0 30px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px}
+.card h3{margin:0 0 8px;font-size:1.04rem}
+.card p,.card li{margin:0;color:var(--muted);font-size:.94rem}
+.card .n{font-family:var(--mono);color:var(--accent);font-size:.85rem;display:block;margin-bottom:10px}
+.card ul{margin:8px 0 0;padding-left:18px}.card li{margin:6px 0}
+.card.dash{background:transparent;border-style:dashed}
+#waitlist .box{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:34px;max-width:620px;margin:0 auto}
+form{display:grid;gap:16px;margin-top:22px}
+label{display:block;font-size:.9rem;margin-bottom:6px;font-weight:550}
+.opt{color:#6f7983;font-weight:400}
+input[type=email],select,textarea{width:100%;background:#111316;color:var(--text);border:1px solid #363b43;border-radius:10px;padding:12px 14px;font:inherit}
+textarea{min-height:88px;resize:vertical}
+.consent{font-size:.8rem;color:#6f7983;margin:0}
+.msg{display:none;border-radius:10px;padding:14px 16px;font-size:.95rem}
+.msg.show{display:block}
+.msg.ok{border:1px solid #25503a;background:#14261c;color:#bff3d2}
+.msg.err{border:1px solid #5c2b2b;background:#2a1414;color:#f3b6b6}
+.hp{position:absolute;left:-9999px;height:0;width:0;overflow:hidden}
+.btn[disabled]{opacity:.6;cursor:wait}
+details{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:600}
+details p{color:var(--muted);margin:10px 0 0}
+footer{border-top:1px solid var(--line);padding:28px 0 50px;color:#6f7983;font-size:.85rem}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+@media(max-width:860px){.hero{grid-template-columns:1fr;padding-top:44px}nav a.l{display:none}#waitlist .box{padding:24px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
-
 <div class="banner" role="note">Early-stage concept. We're gathering interest from mobile teams. Features and availability may change.</div>
 
-<header class="nav">
+<header>
   <div class="wrap">
-    <a class="logo" href="#top">aspect<span>VPN</span></a>
-    <nav aria-label="Primary">
-      <ul>
-        <li><a href="#what">What it is</a></li>
-        <li><a href="#how">How it works</a></li>
-        <li><a href="#different">Why different</a></li>
-        <li><a href="#faq">FAQ</a></li>
-      </ul>
-    </nav>
-    <a class="btn" href="#waitlist">Join the waitlist</a>
+    <a class="logo" href="#top" aria-label="aspectVPN home">
+      <svg viewBox="0 0 22 22" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#2ea664"/><stop offset="1" stop-color="#9be8a8"/></linearGradient></defs><path d="M4 21 9 1" stroke="#2ea664" stroke-width="3"/><path d="M12 21 17 1" stroke="url(#g)" stroke-width="3"/></svg>
+      aspectVPN
+    </a>
+    <nav aria-label="Primary"><a class="l" href="#how">How it works</a><a class="l" href="#faq">FAQ</a><a class="btn" href="#waitlist">Join the waitlist</a></nav>
   </div>
 </header>
 
 <main id="top">
-  <div class="hero">
-    <div class="wrap grid">
-      <div>
-        <span class="tag">private beta · in development</span>
-        <h1>Secure mobile networking, <em>built for app developers.</em></h1>
-        <p class="lead">A drop-in SDK for secure tunneling and proxy routing inside iOS and React Native apps. No desktop VPN clients, no network-admin setup, just a few lines of code.</p>
-        <div class="cta">
-          <a class="btn" href="#waitlist">Get early access</a>
-          <a class="btn ghost" href="#how">See how it would work</a>
-        </div>
-        <p class="fine">Free to join. We'll only email you about AspectVPN.</p>
-      </div>
-
-      <div class="code" aria-label="Example SDK usage">
-        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="file">App.tsx</span></div>
-<pre><code><span class="c"># install</span>
-$ npm install @aspectvpn/react-native
-
+  <div class="wrap hero">
+    <div>
+      <span class="tag">private beta · in development</span>
+      <h1>Secure mobile networking, <em>built for app developers.</em></h1>
+      <p class="lead">A drop-in SDK for secure tunneling and proxy routing inside iOS and React Native apps. No desktop VPN clients, no network-admin setup, just a few lines of code.</p>
+      <div class="cta"><a class="btn" href="#waitlist">Get early access</a><a class="btn ghost" href="#how">How it works</a></div>
+      <p class="fine">Free to join. We'll only email you about AspectVPN.</p>
+    </div>
+    <div class="win">
+      <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp;App.tsx<button class="copy" type="button" id="copy" aria-label="Copy code">Copy</button></div>
+<pre><code id="code"><span class="c">// npm install @aspectvpn/react-native</span>
 <span class="k">import</span> { AspectVPN } <span class="k">from</span> <span class="s">'@aspectvpn/react-native'</span>;
 
 <span class="k">const</span> client = <span class="k">await</span> AspectVPN.<span class="f">initialize</span>({
@@ -154,96 +106,42 @@ $ npm install @aspectvpn/react-native
 });
 
 <span class="k">await</span> client.<span class="f">connect</span>();</code></pre>
-        <div class="note">Example API, subject to change. The SDK is not yet publicly available.</div>
-      </div>
+      <div class="note">Example API, subject to change. The SDK is not yet publicly available.</div>
     </div>
   </div>
-
-  <section id="what">
-    <div class="wrap">
-      <p class="eyebrow">What it is</p>
-      <h2>Networking that fits how apps are actually built</h2>
-      <p class="sub">The goal is to give mobile engineers a secure connection layer they can add in an afternoon, not a project for the IT team.</p>
-      <div class="cards">
-        <div class="card"><span class="icon">&gt;_</span><h3>Simple SDK</h3><p>One initialise call and one connect call. Sensible defaults, with options when you need them.</p></div>
-        <div class="card"><span class="icon">&lt;/&gt;</span><h3>Native iOS and React Native</h3><p>Swift and Objective-C bindings plus a React Native module, so it feels at home in your stack.</p></div>
-        <div class="card"><span class="icon">⇄</span><h3>Smooth network handover</h3><p>Designed to recover gracefully when a device moves between Wi-Fi and cellular.</p></div>
-        <div class="card"><span class="icon">▤</span><h3>Per-app routing</h3><p>Route only your app's traffic, with separate settings for staging and production.</p></div>
-      </div>
-    </div>
-  </section>
 
   <section id="how">
     <div class="wrap">
       <p class="eyebrow">How it would work</p>
-      <h2>From install to working tunnel in minutes</h2>
-      <p class="sub">That's the target we're designing towards. Your feedback will shape what ships first.</p>
-      <ol class="steps">
-        <li><h3>Create a project</h3><p>Get an API key from a simple dashboard and pick your region.</p></li>
-        <li><h3>Add the SDK</h3><p>Install the package for iOS or React Native and initialise it with your key.</p></li>
-        <li><h3>Connect and monitor</h3><p>Open a tunnel with one call, then check usage and connection health in the dashboard.</p></li>
-      </ol>
-    </div>
-  </section>
-
-  <section id="different">
-    <div class="wrap">
-      <p class="eyebrow">Why different</p>
-      <h2>Aimed at app teams, not IT admins</h2>
-      <p class="sub">General-purpose VPN tools solve a different problem. We're focused on the one app developers actually have.</p>
-      <div class="diff">
-        <div class="card">
-          <h3>What we're designing for</h3>
-          <ul>
-            <li>Built for app developers, not network administrators</li>
-            <li>A drop-in SDK with a single initialise and connect flow</li>
-            <li>Native iOS and React Native bindings</li>
-            <li>Smooth reconnects when switching networks</li>
-          </ul>
-        </div>
-        <div class="card them">
-          <h3>What we're not</h3>
-          <ul>
-            <li>Not a consumer VPN app</li>
-            <li>Not a desktop client wrapped for mobile</li>
-            <li>Not a compliance certification: any compliance features are planned and will be documented honestly</li>
-          </ul>
-        </div>
+      <h2>Built for how apps are actually made</h2>
+      <p class="sub">The goal is a secure connection layer a mobile engineer can add in an afternoon. This is the design we're aiming for, and your feedback will shape it.</p>
+      <div class="cards">
+        <div class="card"><span class="n">01</span><h3>Create a project</h3><p>Get an API key from a simple dashboard and pick a region.</p></div>
+        <div class="card"><span class="n">02</span><h3>Add the SDK</h3><p>Native iOS and React Native bindings with one initialise call.</p></div>
+        <div class="card"><span class="n">03</span><h3>Connect and monitor</h3><p>Open a tunnel with one call. Designed to recover smoothly when switching between Wi-Fi and cellular.</p></div>
+      </div>
+      <div class="cards" style="margin-top:16px">
+        <div class="card"><h3>What we're designing for</h3><ul><li>Built for app developers, not IT admins</li><li>Drop-in SDK with a simple connect flow</li><li>Per-app routing for staging and production</li></ul></div>
+        <div class="card dash"><h3>What we're not</h3><ul><li>Not a consumer VPN app</li><li>Not a desktop client wrapped for mobile</li><li>Not yet certified. Compliance features are planned and will be documented honestly</li></ul></div>
       </div>
     </div>
   </section>
 
   <section id="waitlist">
-    <div class="wrap">
-      <div class="box">
-        <p class="eyebrow">Early access</p>
-        <h2>Help shape it</h2>
-        <p class="sub" style="margin-bottom:0">We're talking to mobile teams about what they need before we build. Join the waitlist and tell us what you'd use it for.</p>
-
-        <form id="waitlist-form" novalidate>
-          <div class="hp" aria-hidden="true"><label>Leave blank <input type="text" name="company_website" tabindex="-1" autocomplete="off"></label></div>
-          <div>
-            <label for="email">Work email</label>
-            <input id="email" name="email" type="email" required placeholder="you@company.com" autocomplete="email">
-          </div>
-          <div>
-            <label for="platform">Platform</label>
-            <select id="platform" name="platform" required>
-              <option value="">Choose one</option>
-              <option>iOS (Swift / Obj-C)</option>
-              <option>React Native</option>
-              <option>Both</option>
-            </select>
-          </div>
-          <div>
-            <label for="usecase">What would you use it for? <span class="opt">(optional)</span></label>
-            <textarea id="usecase" name="usecase" placeholder="e.g. routing traffic to a private API, region-specific access, secure data transfer…"></textarea>
-          </div>
-          <button class="btn" type="submit">Join the waitlist</button>
-          <div id="form-msg" class="msg" role="status" aria-live="polite"></div>
-        </form>
-      </div>
-    </div>
+    <div class="wrap"><div class="box">
+      <p class="eyebrow">Early access</p>
+      <h2>Help shape it</h2>
+      <p class="sub" style="margin:0">We're talking to mobile teams before we build. Join the waitlist and tell us what you'd use it for.</p>
+      <form id="form" novalidate>
+        <div class="hp" aria-hidden="true"><label>Leave blank <input type="text" name="company_website" tabindex="-1" autocomplete="off"></label></div>
+        <div><label for="email">Work email</label><input id="email" name="email" type="email" required placeholder="you@company.com" autocomplete="email"></div>
+        <div><label for="platform">Platform</label><select id="platform" name="platform" required><option value="">Choose one</option><option>iOS (Swift / Obj-C)</option><option>React Native</option><option>Both</option></select></div>
+        <div><label for="usecase">What would you use it for? <span class="opt">(optional)</span></label><textarea id="usecase" name="usecase" placeholder="e.g. routing traffic to a private API, region-specific access…"></textarea></div>
+        <p class="consent">We'll use your email only to contact you about AspectVPN and won't share it. You can ask us to delete it at any time.</p>
+        <button class="btn" type="submit" id="send">Join the waitlist</button>
+        <div id="msg" class="msg" role="status" aria-live="polite"></div>
+      </form>
+    </div></div>
   </section>
 
   <section id="faq">
@@ -252,53 +150,38 @@ $ npm install @aspectvpn/react-native
       <h2>Questions</h2>
       <details><summary>Is the product available now?</summary><p>No. This is an early-stage concept and the SDK isn't publicly available yet. The waitlist helps us decide what to build first.</p></details>
       <details><summary>Will you log my users' traffic?</summary><p>We haven't finalised a logging policy. Privacy is a core design goal, and we'll publish a clear, specific policy before any public release.</p></details>
-      <details><summary>Which platforms will you support first?</summary><p>iOS and React Native. Tell us which matters most to you in the form above.</p></details>
       <details><summary>How much will it cost?</summary><p>Pricing isn't set. We expect a simple per-app or per-team subscription, and waitlist members will hear first.</p></details>
     </div>
   </section>
 </main>
 
-<footer>
-  <div class="wrap">
-    <span>© 2026 AspectVPN. An early-stage concept. Features and availability may change.</span>
-    <span>Questions? Reply to any waitlist email.</span>
-  </div>
-</footer>
+<footer><div class="wrap"><span>© 2026 AspectVPN. An early-stage concept. Features and availability may change.</span><span>Questions? Reply to any waitlist email.</span></div></footer>
 
 <script>
-  (function(){
-    var form = document.getElementById('waitlist-form');
-    var msg = document.getElementById('form-msg');
+(function(){
+  var cb=document.getElementById('copy');
+  cb.addEventListener('click',function(){
+    var t=document.getElementById('code').innerText;
+    if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){cb.textContent='Copied';setTimeout(function(){cb.textContent='Copy'},1600)});
+  });
 
-    // TODO: replace with your real form service endpoint (e.g. Formspree or Tally)
-    var ENDPOINT = 'https://example.com/replace-with-your-form-endpoint';
-
-    form.addEventListener('submit', function(e){
-      e.preventDefault();
-      msg.className = 'msg';
-
-      var email = form.email.value.trim();
-      var platform = form.platform.value;
-      if (form.company_website.value) return; // honeypot
-      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || !platform) {
-        msg.textContent = 'Please enter a valid email and choose a platform.';
-        msg.className = 'msg show';
-        return;
-      }
-
-      var data = { email: email, platform: platform, usecase: form.usecase.value.trim() };
-
-      fetch(ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(data)
-      }).catch(function(){ /* placeholder endpoint will fail until configured */ });
-
-      msg.textContent = "Thanks, you're on the list. We'll be in touch as we get closer to a private beta.";
-      msg.className = 'msg show';
-      form.reset();
-    });
-  })();
+  var f=document.getElementById('form'),m=document.getElementById('msg'),b=document.getElementById('send');
+  var KEY='15aa5ef8-1a60-4246-8d96-14e7772592f3'; // Web3Forms access key (safe to be public)
+  function show(t,ok){m.textContent=t;m.className='msg show '+(ok?'ok':'err')}
+  f.addEventListener('submit',function(e){
+    e.preventDefault();m.className='msg';
+    if(f.company_website.value)return;
+    var email=f.email.value.trim(),platform=f.platform.value;
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)||!platform){show('Please enter a valid email and choose a platform.',false);return}
+    b.disabled=true;var label=b.textContent;b.textContent='Sending…';
+    fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
+      body:JSON.stringify({access_key:KEY,subject:'AspectVPN waitlist signup',email:email,platform:platform,usecase:f.usecase.value.trim()})})
+    .then(function(r){return r.json()})
+    .then(function(r){if(r.success){show("Thanks, you're on the list. We'll be in touch as we get closer to a private beta.",true);f.reset()}else{show('Something went wrong. Please try again in a moment.',false)}})
+    .catch(function(){show('Something went wrong. Please try again in a moment.',false)})
+    .then(function(){b.disabled=false;b.textContent=label});
+  });
+})();
 </script>
 </body>
 </html>
